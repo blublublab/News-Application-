@@ -50,13 +50,12 @@ class NewsPreviewAdapter : RecyclerView.Adapter<NewsPreviewAdapter.NewsViewHolde
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         val news  = differ.currentList[position]
-
         holder.binding.apply {
             Picasso
                 .get()
-                .load(news.links.featuredMedia.imageUrl)
+                .load(news.links.featuredMedia[0].imageUrl)
                 .into(imageViewPreview)
-            textViewTitle.text = news.title
+            textViewTitle.text = news.title.title
             textViewTime.text = news.date
 
             //TODO: Change int number of category to String get category by int

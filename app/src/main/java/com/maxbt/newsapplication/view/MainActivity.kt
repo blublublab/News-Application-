@@ -39,18 +39,12 @@ class MainActivity : AppCompatActivity() {
 
         val navController  = navHostFragment.navController
 
-        val appBarConfig = AppBarConfiguration(setOf(
-            R.id.navigation_news,
-            R.id.navigation_settings
-        ))
-
    /*     //testBadge
         val badge = binding.navView.getOrCreateBadge(R.id.navigation_news)
         badge.isVisible = true
         // An icon only badge will be displayed unless a number is set:
         badge.number = 3*/
 
-        setupActionBarWithNavController(navController, appBarConfig)
         binding.navView.setupWithNavController(navController)
     }
 }

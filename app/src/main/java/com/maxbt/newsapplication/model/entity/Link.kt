@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class Link(
    @SerializedName("wp:featuredmedia")
-   val featuredMedia : FeaturedMedia
+   val featuredMedia : List<FeaturedMedia>
 )

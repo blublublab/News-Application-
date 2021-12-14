@@ -15,5 +15,4 @@ class NewsRepository(
                                   perPage : Int,
                                   embed : Boolean) =
         RetrofitClient.api.getNewsByCategory(category.id, page, perPage, embed)
-
 }

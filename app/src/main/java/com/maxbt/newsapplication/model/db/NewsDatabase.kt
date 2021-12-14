@@ -2,7 +2,10 @@ package com.maxbt.newsapplication.model.db
 
 import android.content.Context
 import androidx.room.*
+import com.maxbt.newsapplication.model.db.converter.ContentConverter
 import com.maxbt.newsapplication.model.db.converter.LinkConverter
+import com.maxbt.newsapplication.model.db.converter.ListIntConverter
+import com.maxbt.newsapplication.model.db.converter.TitleConverter
 import com.maxbt.newsapplication.model.entity.News
 
 /**
@@ -19,7 +22,11 @@ import com.maxbt.newsapplication.model.entity.News
     entities = [News::class],
     version = 1
 )
-@TypeConverters(LinkConverter::class)
+@TypeConverters(
+    LinkConverter::class,
+    TitleConverter::class,
+    ContentConverter::class,
+    ListIntConverter::class)
 abstract class NewsDatabase : RoomDatabase() {
     companion object{
         @Volatile

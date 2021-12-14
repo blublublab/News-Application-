@@ -4,10 +4,11 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.maxbt.newsapplication.model.entity.Link
 
-class LinkConverter {
+
+class ListIntConverter {
     @TypeConverter
-    fun fromLinks(links: Link): String = Gson().toJson(links)
+    fun fromList(list: List<Int>?): String = Gson().toJson(list)
 
     @TypeConverter
-    fun toLinks(links: String): Link? = Gson().fromJson(links, Link::class.java)
+    fun toList(list: String): List<Int> =  Gson().fromJson(list, Array<Int>::class.java).toList()
 }

@@ -1,5 +1,7 @@
 package com.maxbt.newsapplication.model.api
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.maxbt.newsapplication.model.Constants
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -24,12 +26,17 @@ object RetrofitClient {
             .readTimeout(60, TimeUnit.SECONDS)
             .build()
     }
+    private val gson by lazy {
+        GsonBuilder()
+            .setPrettyPrinting()
+            .create()
+    }
 
     private val retrofit by lazy {
 
         return@lazy Retrofit.Builder()
             .baseUrl(Constants.SITE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttpClient)
             .build()
     }
