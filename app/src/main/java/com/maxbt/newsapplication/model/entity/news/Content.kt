@@ -1,4 +1,4 @@
-package com.maxbt.newsapplication.model.entity
+package com.maxbt.newsapplication.model.entity.news
 
 import com.google.gson.annotations.SerializedName
 

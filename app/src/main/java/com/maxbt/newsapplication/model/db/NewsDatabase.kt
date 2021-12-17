@@ -1,9 +1,11 @@
 package com.maxbt.newsapplication.model.db
 
 import android.content.Context
-import androidx.room.*
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.maxbt.newsapplication.model.db.converter.ContentConverter
-import com.maxbt.newsapplication.model.db.converter.LinkConverter
 import com.maxbt.newsapplication.model.db.converter.ListIntConverter
 import com.maxbt.newsapplication.model.db.converter.TitleConverter
 import com.maxbt.newsapplication.model.entity.News
@@ -23,7 +25,6 @@ import com.maxbt.newsapplication.model.entity.News
     version = 1
 )
 @TypeConverters(
-    LinkConverter::class,
     TitleConverter::class,
     ContentConverter::class,
     ListIntConverter::class)

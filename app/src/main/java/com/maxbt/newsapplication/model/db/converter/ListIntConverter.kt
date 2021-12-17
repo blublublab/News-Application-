@@ -2,7 +2,6 @@ package com.maxbt.newsapplication.model.db.converter
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.maxbt.newsapplication.model.entity.Link
 
 
 class ListIntConverter {

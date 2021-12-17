@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.maxbt.newsapplication.R
 import com.maxbt.newsapplication.databinding.NewsPreviewItemBinding
 import com.maxbt.newsapplication.model.entity.News
 import com.squareup.picasso.Picasso
@@ -51,15 +52,12 @@ class NewsPreviewAdapter : RecyclerView.Adapter<NewsPreviewAdapter.NewsViewHolde
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         val news  = differ.currentList[position]
         holder.binding.apply {
-            Picasso
-                .get()
-                .load(news.links.featuredMedia[0].imageUrl)
+            Picasso.get()
+                .load(news.imageUrl)
+                .error(R.drawable.no_image)
                 .into(imageViewPreview)
             textViewTitle.text = news.title.title
             textViewTime.text = news.date
-
-            //TODO: Change int number of category to String get category by int
-            textViewCategory.text = news.category.toString()
 
         }
     }

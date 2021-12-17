@@ -2,8 +2,7 @@ package com.maxbt.newsapplication.model.db.converter
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.maxbt.newsapplication.model.entity.Content
-import com.maxbt.newsapplication.model.entity.Title
+import com.maxbt.newsapplication.model.entity.news.Content
 
 
 class ContentConverter{

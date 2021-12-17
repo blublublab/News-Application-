@@ -1,32 +1,27 @@
 package com.maxbt.newsapplication.model.entity
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
-import java.text.SimpleDateFormat
+import com.google.gson.annotations.Expose
+import com.maxbt.newsapplication.model.entity.news.Content
+import com.maxbt.newsapplication.model.entity.news.Title
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Entity(tableName = "news")
-
 data class News(
     @PrimaryKey(autoGenerate = false)
     val id: Long,
 
-
-    @SerializedName("_links")
-    var links: Link,
-
+   // @SerializedName("_links")
+   // var links: Link,
 
     var title: Title,
 
-    @SerializedName("categories")
-    val category: List<Int>,
-
     val content: Content,
 ) {
+    @Expose
+    var imageUrl  : String = ""
 
     var date : String = ""
         get() {

@@ -9,10 +9,30 @@
         android:id="@+id/navigation_news"
         android:name="com.maxbt.newsapplication.view.fragment.NewsFragment"
         android:label="News"
-        tools:layout="@layout/fragment_news" />
+        tools:layout="@layout/fragment_news" >
+        <action
+            android:id="@+id/action_navigation_news_to_navigation_settings"
+            app:destination="@id/navigation_settings" />
+        <action
+            android:id="@+id/action_navigation_news_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_settings"
         android:name="com.maxbt.newsapplication.view.fragment.SettingsFragment"
         android:label="Settings"
-        tools:layout="@layout/fragment_settings"/>
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_navigation_settings_to_navigation_news"
+            app:destination="@id/navigation_news" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.maxbt.newsapplication.view.fragment.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_navigation_news"
+            app:destination="@id/navigation_news" />
+    </fragment>
 </navigation>

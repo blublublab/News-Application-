@@ -1,6 +1,5 @@
 package com.maxbt.newsapplication.model.api
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.maxbt.newsapplication.model.Constants
 import okhttp3.OkHttpClient
@@ -16,9 +15,9 @@ import java.util.concurrent.TimeUnit
  */
 object RetrofitClient {
 
-    val okHttpClient  by lazy{
+    private val okHttpClient  by lazy{
         val logging = HttpLoggingInterceptor()
-        logging.level = HttpLoggingInterceptor.Level.BODY
+        logging.level = HttpLoggingInterceptor.Level.BASIC
 
         OkHttpClient.Builder()
             .addInterceptor(logging)
