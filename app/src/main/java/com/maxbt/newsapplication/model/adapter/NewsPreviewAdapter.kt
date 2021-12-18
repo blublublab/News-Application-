@@ -10,59 +10,63 @@ import com.maxbt.newsapplication.R
 import com.maxbt.newsapplication.databinding.NewsPreviewItemBinding
 import com.maxbt.newsapplication.model.entity.News
 import com.squareup.picasso.Picasso
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 /**
  * Adapter with using binding. for news preview.
  * Containing async Picasso for loading images
- * Later there would be click listeners for views
- *
+ * And diffUtil for loading only parts that were updated due to RecyclerView position changed
  */
 
 class NewsPreviewAdapter : RecyclerView.Adapter<NewsPreviewAdapter.NewsViewHolder>(){
-
-    //Differ(DiffUtil) is used to update only parts of the recycler views that is changed, and not whole
-    //recycler view as it in  standart realization
-    //TODO: This would be moved to callback class , when adapters would be more than 1
-    private val differCallback = object : DiffUtil.ItemCallback<News>(){
-
-        override fun areItemsTheSame(oldItem: News, newItem: News): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: News, newItem: News): Boolean {
-            return oldItem == newItem
-        }
-    }
-    val differ = AsyncListDiffer(this, differCallback)
-
-
-    //Inner class means that this is class in the class, only for good reading i think
     inner class NewsViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         var binding : NewsPreviewItemBinding =  NewsPreviewItemBinding.bind(itemView)
     }
 
+    val differ = AsyncListDiffer(this, object : DiffUtil.ItemCallback<News>(){
 
+        override fun areItemsTheSame(oldItem: News, newItem: News): Boolean =
+            oldItem.id == newItem.id
+
+        override fun areContentsTheSame(oldItem: News, newItem: News): Boolean =
+            oldItem == newItem
+    })
+
+
+    var onItemClickListener: ((News) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
+        //LayoutInflater.inflate -> transform  from layout.view to object View
         val binding = NewsPreviewItemBinding.inflate(inflater, parent, false)
-        return NewsViewHolder(binding.root)
+
+        val view = binding.root
+
+
+        //Holder is class needed to contain only displayable items and not a whole list
+        val holder = NewsViewHolder(view)
+        holder.itemView.setOnClickListener { _ ->
+            val news = differ.currentList[holder.adapterPosition]
+            onItemClickListener?.let { it(news) }
+        }
+
+        return holder
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        val news  = differ.currentList[position]
+        val article  = differ.currentList[position]
         holder.binding.apply {
             Picasso.get()
-                .load(news.imageUrl)
+                .load(article.imageUrl)
                 .error(R.drawable.no_image)
                 .into(imageViewPreview)
-            textViewTitle.text = news.title.title
-            textViewTime.text = news.date
+            textViewTitle.text = article.title.title
 
+            val currentDate = LocalDate.parse(article.date, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+            textViewTime.text = String.format("${currentDate.dayOfMonth} ${currentDate.month.name}")
         }
     }
+    override fun getItemCount(): Int = differ.currentList.size
 
-    override fun getItemCount(): Int {
-        return differ.currentList.size
-    }
 }

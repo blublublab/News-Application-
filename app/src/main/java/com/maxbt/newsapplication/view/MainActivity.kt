@@ -18,9 +18,8 @@ import com.maxbt.newsapplication.model.repository.NewsRepository
 
 
 /**
- * This is MainClass , where we instaniate our view model ,
- * our repos and evetyrhing else to get done before setting view
- *
+ * This is MainClass , where we instantiate our view model ,
+ * our repos and everything else to get done before setting view
  */
 
 class MainActivity : AppCompatActivity() {
@@ -36,7 +35,6 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         binding.imageViewWeb.setOnClickListener {
             openUrl(Constants.SITE_URL)

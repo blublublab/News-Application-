@@ -7,15 +7,26 @@
 
     <fragment
         android:id="@+id/navigation_news"
-        android:name="com.maxbt.newsapplication.view.fragment.NewsFragment"
+        android:name="com.maxbt.newsapplication.view.fragment.NewsPreviewFragment"
         android:label="News"
-        tools:layout="@layout/fragment_news" >
+        tools:layout="@layout/fragment_news_preview" >
         <action
             android:id="@+id/action_navigation_news_to_navigation_settings"
-            app:destination="@id/navigation_settings" />
+            app:destination="@id/navigation_settings"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_navigation_news_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_navigation_news_preview_to_navigation_article"
+            app:destination="@id/newsDetailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@animator/nav_default_pop_enter_anim" />
     </fragment>
     <fragment
         android:id="@+id/navigation_settings"
@@ -23,8 +34,13 @@
         android:label="Settings"
         tools:layout="@layout/fragment_settings">
         <action
+
             android:id="@+id/action_navigation_settings_to_navigation_news"
-            app:destination="@id/navigation_news" />
+            app:destination="@id/navigation_news"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -34,5 +50,17 @@
         <action
             android:id="@+id/action_searchFragment_to_navigation_news"
             app:destination="@id/navigation_news" />
+    </fragment>
+    <fragment
+        android:id="@+id/newsDetailFragment"
+        android:name="com.maxbt.newsapplication.view.fragment.ArticleFragment"
+        android:label="fragment_news_detail"
+        tools:layout="@layout/fragment_article" >
+        <action
+            android:id="@+id/action_newsDetailFragment_to_navigation_news"
+            app:destination="@id/navigation_news" />
+        <argument
+            android:name="article"
+            app:argType="com.maxbt.newsapplication.model.entity.News" />
     </fragment>
 </navigation>

@@ -1,14 +1,12 @@
 package com.maxbt.newsapplication.model.entity.news
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
-
-class Title {
+@Parcelize
+data class Title(
     @SerializedName("rendered")
-    var title : String = ""
-        set(value) {
-            field = value
-                .replace("\\u2018", "\t‘")
-                .replace("\\u2019", "\t‘")
-        }
-}
+    var title : String
+
+) : Parcelable

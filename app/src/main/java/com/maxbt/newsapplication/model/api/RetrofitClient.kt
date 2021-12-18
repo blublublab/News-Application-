@@ -10,12 +10,11 @@ import java.util.concurrent.TimeUnit
 
 /**
  * Simple client to get api for calling it later in NewsRepository
- * also okHttpClient for some else queries which is public
- *
+ * Lazy modification needed to initialize client only if internet connection is established
  */
 object RetrofitClient {
 
-    private val okHttpClient  by lazy{
+    private val okHttpClient  by lazy {
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BASIC
 

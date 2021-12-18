@@ -1,8 +1,10 @@
 package com.maxbt.newsapplication.model.entity
 
+import com.maxbt.newsapplication.model.Constants
+
 data class Category(
-    val id: Long,
-    val count: Int,
-    val name: String,
-    val slug: String
+    val id: Long = Constants.DEFAULT_CATEGORY,
+    val count: Int = id.toInt(),
+    val name: String = "",
+    val slug: String = name
 )

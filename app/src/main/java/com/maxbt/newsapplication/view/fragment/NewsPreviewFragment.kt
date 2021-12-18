@@ -6,13 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
 import com.maxbt.newsapplication.R
-import com.maxbt.newsapplication.databinding.FragmentNewsBinding
+import com.maxbt.newsapplication.databinding.FragmentNewsPreviewBinding
+
 import com.maxbt.newsapplication.model.Constants
 import com.maxbt.newsapplication.model.adapter.NewsPreviewAdapter
 import com.maxbt.newsapplication.model.entity.Category
+import com.maxbt.newsapplication.model.entity.News
 import com.maxbt.newsapplication.util.Resource
 import com.maxbt.newsapplication.view.MainActivity
 import com.maxbt.newsapplication.view.NewsViewModel
@@ -20,16 +23,16 @@ import com.maxbt.newsapplication.view.NewsViewModel
 /**
  * This Fragment is showing preview news  for now
  */
-class NewsFragment : Fragment(R.layout.fragment_news) {
-    lateinit var viewModel: NewsViewModel
-    lateinit var newsAdapter : NewsPreviewAdapter
-    private lateinit var binding : FragmentNewsBinding
+class NewsPreviewFragment : Fragment(R.layout.fragment_news_preview) {
+    private lateinit var viewModel: NewsViewModel
+    private lateinit var newsAdapter : NewsPreviewAdapter
+    private lateinit var binding : FragmentNewsPreviewBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentNewsBinding.inflate(inflater, container, false)
+        binding = FragmentNewsPreviewBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -38,27 +41,30 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
         viewModel = (activity as MainActivity).viewModel
         setRecyclerView()
         setNewsTabListener()
+        setViewModelObservers()
+    }
 
+    private fun setViewModelObservers(){
         viewModel.categories.observe(viewLifecycleOwner) { responseCategory ->
-                when(responseCategory){
-                    is Resource.Success -> {
-                        responseCategory.data?.let { categories ->
-                            categories.forEach { category ->
-                                val tab = binding.tabLayout.newTab()
-                                tab.tag = category.id
-                                tab.text = category.name
-                                tab.contentDescription = category.name
-                                binding.tabLayout.addTab(tab)
-                            }
+            when(responseCategory){
+                is Resource.Success -> {
+                    responseCategory.data?.let { categories ->
+                        categories.forEach { category ->
+                            val tab = binding.tabLayout.newTab()
+                            tab.tag = category.id
+                            tab.text = category.name
+                            tab.contentDescription = category.name
+                            binding.tabLayout.addTab(tab)
                         }
                     }
-                    is Resource.Error -> {
-                        responseCategory.message?.let {
-                            Log.e(Constants.NEWS_FRAGMENT_TAG, "An error occurred: $it")
-                        }
-                    }
-                    is Resource.Loading -> {}
                 }
+                is Resource.Error -> {
+                    responseCategory.message?.let {
+                        Log.e(Constants.NEWS_FRAGMENT_TAG, "An error occurred: $it")
+                    }
+                }
+                is Resource.Loading -> {}
+            }
         }
         viewModel.news.observe(viewLifecycleOwner) { responseNews ->
             when (responseNews) {
@@ -74,7 +80,7 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
                     setLoadingGifVisibility(false)
 
                     responseNews.message?.let {
-                            Log.e(Constants.NEWS_FRAGMENT_TAG, "An error occurred: $it")
+                        Log.e(Constants.NEWS_FRAGMENT_TAG, "An error occurred: $it")
                     }
                 }
 
@@ -84,7 +90,6 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
                 }
             }
         }
-
     }
 
     private fun setLoadingGifVisibility(isVisible : Boolean){
@@ -95,12 +100,11 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val id =  tab?.tag?.toString()?.toLong() ?: Constants.DEFAULT_CATEGORY
-                viewModel.getNewsByCategory(Category(
-                    id = id,
-                    name = tab?.text.toString(),
-                    slug = tab?.text.toString(),
-                    count = id.toInt()
-                ))
+
+                viewModel.apply {
+                    selectedCategory  = Category(id)
+                    searchNews()
+                }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
@@ -114,6 +118,18 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)
         }
-    }
 
+        newsAdapter.onItemClickListener = {
+          navToDetailNews(it)
+        }
+    }
+    private fun navToDetailNews(article: News){
+        val bundle = Bundle().apply {
+            putParcelable("article", article)
+        }
+        findNavController().navigate(
+            R.id.action_navigation_news_preview_to_navigation_article,
+            bundle
+        )
+    }
 }

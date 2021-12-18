@@ -7,15 +7,24 @@ import com.maxbt.newsapplication.model.entity.News
 import retrofit2.Response
 
 /**
- * This is main class that would be speak between db and view
+ * This is main class that would be speak between database and ViewModel
  */
 class NewsRepository(
     val db : NewsDatabase
 ) {
-    suspend fun searchNews(search : String,
+    suspend fun searchNews(search : String = "",
                            page : Int = 1,
-                           perPage : Int = 20): Response<List<News>> {
-        val searchNews = RetrofitClient.api.searchNews(search, page , perPage)
+                           perPage : Int = 20,
+                           category: Category = Category()
+    ): Response<List<News>> {
+
+        val searchNews = RetrofitClient.api.searchNews(
+            search = search,
+            page = page,
+            category = category.id,
+            perPage = perPage,
+            embed = true)
+
         setImageUrl(searchNews)
         return searchNews
     }
@@ -26,9 +35,9 @@ class NewsRepository(
 
     //Translate image to get image url from api
     private suspend fun setImageUrl(responseNews : Response<List<News>>){
-        responseNews.body()?.forEach { singleNews ->
-            val newsMedia = RetrofitClient.api.getMediaByNewsId(singleNews.id)
-            singleNews.imageUrl = newsMedia.body()
+        responseNews.body()?.forEach { article ->
+            val newsMedia = RetrofitClient.api.getMediaByNewsId(article.id)
+            article.imageUrl = newsMedia.body()
                 ?.takeIf { it.isNotEmpty() }
                 ?.get(0)
                 ?.guid

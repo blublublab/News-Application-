@@ -6,9 +6,7 @@ import com.maxbt.newsapplication.model.entity.News
 
 
 /**
- * This class is need to operate with Room database (but there is only commands,
- * realization in NewsRepository Class)
- *
+ * This interface is need to operate with Room database
  */
 @Dao
 interface NewsDao {

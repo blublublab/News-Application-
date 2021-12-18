@@ -1,5 +1,13 @@
 package com.maxbt.newsapplication.util
 
+/**
+ * This is util class made for handling response
+ * from viewModel to fragments/activity , and according
+ * to it change fragments behaviour
+ * (Ex. do logic of opening browser on Success, show error Dialog window on error
+ */
+
+
 sealed class Resource<T> (
     val data : T? = null,
     val message : String? = null

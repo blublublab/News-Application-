@@ -5,19 +5,17 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.maxbt.newsapplication.model.db.converter.ContentConverter
-import com.maxbt.newsapplication.model.db.converter.ListIntConverter
-import com.maxbt.newsapplication.model.db.converter.TitleConverter
 import com.maxbt.newsapplication.model.entity.News
 
 /**
  * Abstract class needed to instantiate Room database
- * There are thre needed things for this database
  *
- * Class instantiator (NewsDatabase)
- * Dao to speak with db ( NewsDao )
- * and Entities such as (News, Link)
- * and Converter factories to serialize subclasses of class
+ * Needed things for this database:
+ *
+ *  Class instantiation (NewsDatabase)
+ *  Dao to speak with db ( NewsDao )
+ *  Entities such as (News)
+ *  Converter factories to serialize subclasses of class
  *
  */
 @Database(
@@ -25,9 +23,9 @@ import com.maxbt.newsapplication.model.entity.News
     version = 1
 )
 @TypeConverters(
-    TitleConverter::class,
-    ContentConverter::class,
-    ListIntConverter::class)
+    Converters.Companion.TitleConverter::class,
+    Converters.Companion.ListIntConverter::class,
+    Converters.Companion.ContentConverter::class)
 abstract class NewsDatabase : RoomDatabase() {
     companion object{
         @Volatile

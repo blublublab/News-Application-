@@ -13,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import com.maxbt.newsapplication.R
 import com.maxbt.newsapplication.databinding.FragmentSearchBinding
 import com.maxbt.newsapplication.model.Constants
-import com.maxbt.newsapplication.model.entity.Category
 import com.maxbt.newsapplication.view.MainActivity
 import com.maxbt.newsapplication.view.NewsViewModel
 import kotlinx.coroutines.Job
@@ -22,7 +21,7 @@ import kotlinx.coroutines.launch
 
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
-    lateinit var viewModel: NewsViewModel
+    private lateinit var viewModel: NewsViewModel
     private lateinit var binding: FragmentSearchBinding
 
     override fun onCreateView(
@@ -37,32 +36,37 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         return binding.root
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as MainActivity).viewModel
+    }
 
+    //Moved from onViewCreated to onResume to attach only once
+    //(even when fragment changed , addText not firing on viewCreate)
+    override fun onResume() {
+        super.onResume()
         var searchQueryJob: Job? = null
-        binding.searchInputText.addTextChangedListener {
+        binding.searchInputText.addTextChangedListener { inputTextSearch ->
             searchQueryJob?.cancel()
             searchQueryJob = lifecycleScope.launch {
                 delay(Constants.SEARCH_QUERY_DELAY_TIME)
-                if (it?.isNotEmpty() == true) {
-                    val searchQuery = it.toString()
-                    viewModel.getNewsBySearch(searchQuery)
+
+                if (inputTextSearch?.isNotEmpty() == true) {
+                    viewModel.searchQuery = inputTextSearch.toString()
+                } else {
+                    viewModel.searchQuery = ""
                 }
+                viewModel.searchNews()
             }
         }
+
         binding.searchInputText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEND) {
                 val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
-
                 searchQueryJob?.cancel()
-                viewModel.getNewsByCategory(Category(
-                    id = Constants.DEFAULT_CATEGORY,
-                    count = Constants.DEFAULT_CATEGORY.toInt(),
-                    slug = "",
-                    name = ""))
             }
             true
         }

@@ -9,7 +9,7 @@ import retrofit2.http.Query
 
 
 /**
- * RestAPI for query requests from server to db
+ * Rest Retrofit API for query requests from server to db
  */
 interface WordpressApi {
 
